@@ -30,7 +30,7 @@ export const logsReducer = (state = initialState, action: LogsAction): LogsState
         case LogsActionTypes.SET_LOGS_PAGE:
             return {...state, page: action.payload}
         case LogsActionTypes.SORT_LOGS_COL:
-            return {...state, sortedKey: action.payload, logs: sortLogsByColumnKey(state.serverSideLogsData, action.payload)}
+            return {...state, sortedKey: action.payload, logs: sortLogsByColumnKey(state.logs, action.payload)}
         case LogsActionTypes.FILTER_LOGS:
             return {...state, filterValue: action.payload, logs: filterLogsColumn(state.serverSideLogsData, action.payload)}
         default:
