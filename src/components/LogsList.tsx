@@ -3,7 +3,7 @@ import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useActions } from "../hooks/useActions";
 
 const LogsList: React.FC = () => {
-  const { page, error, loading, logs, limit, sortedKey, filterValue } = useTypedSelector((state) => state.logs);
+  const { page, error, loading, logs, limit, sortedKey, filter } = useTypedSelector((state) => state.logs);
   const { fetchLogs, setLogsPage, sortColumn, setFilter } = useActions();
   const pages = [1, 2, 3, 4, 5];
 
@@ -31,12 +31,15 @@ const LogsList: React.FC = () => {
                 {key === "title" && (
                   <input
                     className="search"
-                    value={filterValue || ""}
+                    value={filter.value || ""}
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
                     onChange={(e) => {
-                      setFilter(e.target.value || ""); // Set empty to remove the filter entirely
+                      setFilter({
+                        key: key,
+                        value: e.target.value,
+                      })
                     }}
                     placeholder={`Search`}
                   />

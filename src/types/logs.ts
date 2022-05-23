@@ -6,7 +6,10 @@ export interface LogsState {
   page: number;
   limit: number;
   sortedKey: string;
-  filterValue: string;
+  filter: {
+    key: string,
+    value: string,
+  };
 }
 
 export enum LogsActionTypes {
@@ -39,7 +42,7 @@ interface SortLogsCol {
 
 interface FilterLogs {
   type: LogsActionTypes.FILTER_LOGS;
-  payload: string;
+  payload: LogsState['filter'];
 }
 
 

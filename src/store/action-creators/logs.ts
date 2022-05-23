@@ -1,6 +1,6 @@
 import {Dispatch} from "redux";
 import axios from "axios";
-import {LogsAction, LogsActionTypes} from "../../types/logs";
+import {LogsAction, LogsActionTypes, LogsState} from "../../types/logs";
 
 export const fetchLogs = (page = 1, limit = 10) => {
     return async (dispatch: Dispatch<LogsAction>) => {
@@ -28,6 +28,6 @@ export function sortColumn(key: string): LogsAction {
     return {type: LogsActionTypes.SORT_LOGS_COL, payload: key}
 }
 
-export function setFilter(filterValue: string): LogsAction {
-    return {type: LogsActionTypes.FILTER_LOGS, payload: filterValue}
+export function setFilter(filter: LogsState['filter']): LogsAction {
+    return {type: LogsActionTypes.FILTER_LOGS, payload: filter}
 }

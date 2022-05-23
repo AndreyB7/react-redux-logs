@@ -8,7 +8,10 @@ const initialState: LogsState = {
     limit: 7,
     loading: false,
     sortedKey: '',
-    filterValue: '',
+    filter: {
+        key:'',
+        value:'',
+    },
 }
 
 export const logsReducer = (state = initialState, action: LogsAction): LogsState => {
@@ -21,8 +24,8 @@ export const logsReducer = (state = initialState, action: LogsAction): LogsState
             if (state.sortedKey) {
                 logs = sortLogsByColumnKey(serverSideLogsData, state.sortedKey)
             }
-            if (state.filterValue) {
-                logs = filterLogsColumn(serverSideLogsData, state.filterValue);
+            if (state.filter.value) {
+                logs = filterLogsColumn(serverSideLogsData, state.filter);
             }
             return {...state, loading: false, logs: logs, serverSideLogsData: serverSideLogsData}
         case LogsActionTypes.FETCH_LOGS_ERROR:
@@ -32,7 +35,7 @@ export const logsReducer = (state = initialState, action: LogsAction): LogsState
         case LogsActionTypes.SORT_LOGS_COL:
             return {...state, sortedKey: action.payload, logs: sortLogsByColumnKey(state.logs, action.payload)}
         case LogsActionTypes.FILTER_LOGS:
-            return {...state, filterValue: action.payload, logs: filterLogsColumn(state.serverSideLogsData, action.payload)}
+            return {...state, filter: action.payload, logs: filterLogsColumn(state.serverSideLogsData, action.payload)}
         default:
             return state
     }
@@ -43,16 +46,16 @@ const sortLogsByColumnKey = (logs: any[], key: string) => {
     return logs;
 }
 
-const filterLogsColumn = (logs: any[], filterValue: string) => {
+const filterLogsColumn = (logs: any[], filter: LogsState['filter']) => {
     const filteredlogs = logs.filter(log => {
-        return (log.title.search(filterValue) >= 0);
+        return (log[filter.key].search(filter.value) >= 0);
     });
     // nothing found message
     if (filteredlogs.length === 0) {
         filteredlogs[0] = {};
         Object.keys(logs[0]).forEach(key => {
             filteredlogs[0][key] = '';
-            if (key === 'title') {
+            if (key === filter.key) {
                 filteredlogs[0][key] = 'nothing found';
             }
         })
